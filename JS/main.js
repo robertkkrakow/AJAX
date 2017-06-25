@@ -43,12 +43,16 @@ function ajax(ajaxOptions) {
                 // responsetext (JSON to text)
                 var returnData = (options.dataType == 'xml') ? this.responseXML :
                 this.responseText;
-                console.log(returnData);
+                
+                options.onSuccess(returnData);
+                
             
                 
                 
                 //zerowanie polaczenia
                 httpReq = null;
+            } else{
+                options.onError(console.log('błąd'));
             }
         }
     }
@@ -60,4 +64,19 @@ function ajax(ajaxOptions) {
 ajax({
     type: 'GET',
     url: 'http://echo.jsontest.com/userId/108/userName/Akademia108/userURL/akademia108.pl',
+    onError: function(msg) {
+        console.log(msg);
+    },
+    onSuccess: function (response){
+        var jsonObj = JSON.parse(response);
+        console.log(jsonObj);
+        
+        var userID = jsonObj.userId;
+        //jquery
+        $('#testowy').text(userID);
+        //to samo wtylko w JS
+       // document.getElementById('testowy').innerHTML = userID;
+        
+        
+    }
 });
